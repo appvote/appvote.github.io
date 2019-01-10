@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <title>yoyo的小工具</title>
+</head>
+<body>
+<div id="app">
+    <el-container>
+        <el-header>yoyo的小工具</el-header>
+        <el-container>
+            <el-container>
+                <el-main>
+                    <div style="line-height:80px;">
+
+                        <el-input v-model="searchValue" placeholder="https://www.leiguang.cc"
+                                  @keyup.enter.native="search"
+                                  style="width:85%;">
+                            <template slot="prepend">搜索雷光网:</template>
+                        </el-input>
+                    </div>
+                    <div style="line-height:80px;">
+                        <el-button @click="search">搜索</el-button>
+                        <el-button @click="open">打开</el-button>
+                    </div>
+                    <!--<el-button @click="visible = true">Button</el-button>-->
+                    <!--<el-dialog :visible.sync="visible" title="Hello world">-->
+                    <!--<p>Try Element</p>-->
+                    <!--</el-dialog>-->
+                </el-main>
+                <el-footer>smallwhite</el-footer>
+            </el-container>
+        </el-container>
+    </el-container>
+
+</div>
+</body>
+
+<!-- import Vue before Element -->
+<script type="text/javascript" src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- import JavaScript -->
+<script type="text/javascript" src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+<script>
+
+    /*
+*功能： 模拟form表单的提交
+*参数： URL 跳转地址 PARAMTERS 参数
+*返回值：
+*创建时间：20160713
+*创建人：
+*/
+    function Post(URL, PARAMTERS) {
+        //创建form表单
+        var temp_form = document.createElement("form");
+        temp_form.action = URL;
+        //如需打开新窗口，form的target属性要设置为'_blank'
+        // temp_form.target = "_self";
+        temp_form.target = "_blank";
+        temp_form.method = "post";
+        temp_form.style.display = "none";
+        //添加参数
+        for (var item in PARAMTERS) {
+            var opt = document.createElement("textarea");
+            opt.name = PARAMTERS[item].name;
+            opt.value = PARAMTERS[item].value;
+            temp_form.appendChild(opt);
+        }
+        document.body.appendChild(temp_form);
+        //提交数据
+        temp_form.submit();
+    }
+
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                searchValue: '',
+            }
+        },
+        created() {
+            this.searchValue = localStorage.getItem('leiguangSearch');
+            console.log('created');
+        },
+        methods: {
+            search() {
+                localStorage.setItem('leiguangSearch',this.searchValue);
+                Post('https://www.leiguang.cc/search.php', [{name: 'searchword', value: this.searchValue}])
+            },
+            open(){
+                window.open('https://www.leiguang.cc');
+            }
+        }
+    })
+</script>
+<style>
+    .el-header, .el-footer {
+        background-color: #B3C0D1;
+        color: #333;
+        text-align: center;
+        line-height: 60px;
+    }
+
+    .el-aside {
+        background-color: #D3DCE6;
+        color: #333;
+        text-align: center;
+        line-height: 200px;
+    }
+
+    .el-main {
+        background-color: #E9EEF3;
+        color: #333;
+        text-align: center;
+        line-height: 160px;
+    }
+
+    body > .el-container {
+        margin-bottom: 40px;
+    }
+
+    .el-container:nth-child(5) .el-aside,
+    .el-container:nth-child(6) .el-aside {
+        line-height: 260px;
+    }
+
+    .el-container:nth-child(7) .el-aside {
+        line-height: 320px;
+    }
+</style>
+</html>
